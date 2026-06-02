@@ -5,6 +5,9 @@
 /Builds/
 /Logs/
 /UserSettings/
+*.csproj
+*.sln
+*.slnx
 *.pidb
 *.suo
 *.user
