@@ -152,8 +152,8 @@
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@e00a147af410\Editor\Types\VFXTypesGizmos.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@e00a147af410\Editor\Models\Operators\Implementations\LogicalAnd.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@e00a147af410\Editor\Utilities\VectorFieldImporter\Editor\VectorFieldImporterEditor.cs" />
-     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@e00a147af410\Editor\Models\Operators\Implementations\LoadTexture2DArray.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@e00a147af410\Editor\Models\Contexts\Implementations\VFXBasicGPUEvent.cs" />
+     <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@e00a147af410\Editor\Models\Operators\Implementations\LoadTexture2DArray.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@e00a147af410\Editor\Models\Operators\Implementations\CurlNoise.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@e00a147af410\Editor\Models\Blocks\Implementations\Forces\Turbulence.cs" />
      <Compile Include="Library\PackageCache\com.unity.visualeffectgraph@e00a147af410\Editor\Models\Operators\Implementations\DistanceToPlane.cs" />

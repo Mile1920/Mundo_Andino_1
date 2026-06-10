@@ -1,76 +1,150 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CharController_Motor : MonoBehaviour {
+[RequireComponent(typeof(CharacterController))]
+public class FpsController : MonoBehaviour
+{
+    [Header("Movimiento")]
+    public float velocidadCaminar = 4f;
+    public float velocidadCorrer = 7f;
 
-	public float speed = 10.0f;
-	public float sensitivity = 30.0f;
-	public float WaterHeight = 15.5f;
-	CharacterController character;
-	public GameObject cam;
-	float moveFB, moveLR;
-	float rotX, rotY;
-	public bool webGLRightClickRotation = true;
-	float gravity = -9.8f;
+    [Header("Salto")]
+    public float fuerzaSalto = 5f;
+    public float gravedad = -20f;
 
+    [Header("Agacharse")]
+    public float alturaNormal = 2f;
+    public float alturaAgachado = 1f;
 
-	void Start(){
-		//LockCursor ();
-		character = GetComponent<CharacterController> ();
-		if (Application.isEditor) {
-			webGLRightClickRotation = false;
-			sensitivity = sensitivity * 1.5f;
-		}
-	}
+    [Header("Mouse")]
+    public float sensibilidadMouse = 2f;
+    public float limiteVertical = 80f;
 
+    [Header("Referencias")]
+    public Transform camaraJugador;
+    public Light linterna;
 
-	void CheckForWaterHeight(){
-		if (transform.position.y < WaterHeight) {
-			gravity = 0f;			
-		} else {
-			gravity = -9.8f;
-		}
-	}
+    [Header("Interacción")]
+    public float distanciaInteraccion = 3f;
 
+    private CharacterController cc;
+    private Vector3 velocidadVertical;
+    private float rotacionX;
 
+    void Start()
+    {
+        cc = GetComponent<CharacterController>();
 
-	void Update(){
-		moveFB = Input.GetAxis ("Horizontal") * speed;
-		moveLR = Input.GetAxis ("Vertical") * speed;
+        if (camaraJugador == null)
+        {
+            Camera cam = GetComponentInChildren<Camera>();
 
-		rotX = Input.GetAxis ("Mouse X") * sensitivity;
-		rotY = Input.GetAxis ("Mouse Y") * sensitivity;
+            if (cam != null)
+                camaraJugador = cam.transform;
+        }
 
-		//rotX = Input.GetKey (KeyCode.Joystick1Button4);
-		//rotY = Input.GetKey (KeyCode.Joystick1Button5);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
-		CheckForWaterHeight ();
+    void Update()
+    {
+        Mirar();
+        Mover();
+        Saltar();
+        Agacharse();
+        ControlLinterna();
+        Interactuar();
+    }
 
+    void Mirar()
+    {
+        float mouseX = Input.GetAxisRaw("Mouse X") * sensibilidadMouse;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * sensibilidadMouse;
 
-		Vector3 movement = new Vector3 (moveFB, gravity, moveLR);
+        transform.Rotate(Vector3.up * mouseX);
 
+        rotacionX -= mouseY;
+        rotacionX = Mathf.Clamp(rotacionX, -limiteVertical, limiteVertical);
 
+        camaraJugador.localRotation =
+            Quaternion.Euler(rotacionX, 0f, 0f);
+    }
 
-		if (webGLRightClickRotation) {
-			if (Input.GetKey (KeyCode.Mouse0)) {
-				CameraRotation (cam, rotX, rotY);
-			}
-		} else if (!webGLRightClickRotation) {
-			CameraRotation (cam, rotX, rotY);
-		}
+    void Mover()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
-		movement = transform.rotation * movement;
-		character.Move (movement * Time.deltaTime);
-	}
+        Vector3 movimiento =
+            (transform.right * h + transform.forward * v).normalized;
 
+        float velocidadActual =
+            Input.GetKey(KeyCode.LeftShift)
+            ? velocidadCorrer
+            : velocidadCaminar;
 
-	void CameraRotation(GameObject cam, float rotX, float rotY){		
-		transform.Rotate (0, rotX * Time.deltaTime, 0);
-		cam.transform.Rotate (-rotY * Time.deltaTime, 0, 0);
-	}
+        cc.Move(movimiento * velocidadActual * Time.deltaTime);
+    }
 
+    void Saltar()
+    {
+        if (cc.isGrounded)
+        {
+            velocidadVertical.y = -2f;
 
+            if (Input.GetButtonDown("Jump"))
+            {
+                velocidadVertical.y =
+                    Mathf.Sqrt(fuerzaSalto * -2f * gravedad);
+            }
+        }
 
+        velocidadVertical.y += gravedad * Time.deltaTime;
 
+        cc.Move(velocidadVertical * Time.deltaTime);
+    }
+
+    void Agacharse()
+    {
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            cc.height = alturaAgachado;
+        }
+        else
+        {
+            cc.height = alturaNormal;
+        }
+    }
+
+    void ControlLinterna()
+    {
+        if (linterna == null)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            linterna.enabled = !linterna.enabled;
+        }
+    }
+
+    void Interactuar()
+    {
+        if (!Input.GetKeyDown(KeyCode.E))
+            return;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(
+            camaraJugador.position,
+            camaraJugador.forward,
+            out hit,
+            distanciaInteraccion))
+        {
+            Debug.Log("Interactuando con: " + hit.collider.name);
+
+            hit.collider.SendMessage(
+                "Interact",
+                SendMessageOptions.DontRequireReceiver);
+        }
+    }
 }

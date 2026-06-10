@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
     public GameObject menuPanel;
     public GameObject optionsPanel;
     public GameObject mapaPanel;
+    public GameObject NivelPotosi_2;
 
     void Start()
     {
@@ -17,7 +18,7 @@ public class MainMenu : MonoBehaviour
 
     public void Jugar()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("NivelPotosi_2");
     }
 
     public void AbrirMapa()

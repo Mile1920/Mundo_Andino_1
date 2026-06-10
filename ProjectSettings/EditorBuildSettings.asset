@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MapaScene.unity
     guid: 1400225e3fe80f143aa4941c52058145
+  - enabled: 1
+    path: Assets/Scenes/NivelPotosi_2.unity
+    guid: 75b440e7f7d3f8b47b28c21a88aa139b
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
