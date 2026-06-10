@@ -103,8 +103,8 @@
      <Compile Include="Library\PackageCache\com.unity.mathematics@19a9377c4ffa\Tests\Tests\Shared\TestBool4x4.gen.cs" />
      <Compile Include="Library\PackageCache\com.unity.mathematics@19a9377c4ffa\Tests\Tests\Shared\TestInt2x3.gen.cs" />
      <Compile Include="Library\PackageCache\com.unity.mathematics@19a9377c4ffa\Tests\Tests\Shared\TestSvd.cs" />
-     <Compile Include="Library\PackageCache\com.unity.mathematics@19a9377c4ffa\Tests\Tests\Shared\TestDouble3.gen.cs" />
      <Compile Include="Library\PackageCache\com.unity.mathematics@19a9377c4ffa\Tests\Tests\Shared\TestFloat3x3.gen.cs" />
+     <Compile Include="Library\PackageCache\com.unity.mathematics@19a9377c4ffa\Tests\Tests\Shared\TestDouble3.gen.cs" />
      <Compile Include="Library\PackageCache\com.unity.mathematics@19a9377c4ffa\Tests\Tests\Shared\TestRigidTransform.cs" />
      <Compile Include="Library\PackageCache\com.unity.mathematics@19a9377c4ffa\Tests\Tests\Shared\TestDouble2x4.gen.cs" />
      <Compile Include="Library\PackageCache\com.unity.mathematics@19a9377c4ffa\Tests\Tests\Shared\TestBool2x3.gen.cs" />

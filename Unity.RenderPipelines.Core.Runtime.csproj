@@ -111,8 +111,8 @@
      <Compile Include="Library\PackageCache\com.unity.render-pipelines.core@9d79d0cd2cf7\Runtime\Debugging\DebugUI.cs" />
      <Compile Include="Library\PackageCache\com.unity.render-pipelines.core@9d79d0cd2cf7\Runtime\CommandBuffers\CommandBufferHelpers.cs" />
      <Compile Include="Library\PackageCache\com.unity.render-pipelines.core@9d79d0cd2cf7\Runtime\PostProcessing\LensFlareDataSRP.cs" />
-     <Compile Include="Library\PackageCache\com.unity.render-pipelines.core@9d79d0cd2cf7\Runtime\Lighting\ProbeVolume\ProbeReferenceVolume.Debug.cs" />
      <Compile Include="Library\PackageCache\com.unity.render-pipelines.core@9d79d0cd2cf7\Runtime\XR\XRLayout.cs" />
+     <Compile Include="Library\PackageCache\com.unity.render-pipelines.core@9d79d0cd2cf7\Runtime\Lighting\ProbeVolume\ProbeReferenceVolume.Debug.cs" />
      <Compile Include="Library\PackageCache\com.unity.render-pipelines.core@9d79d0cd2cf7\Runtime\XR\XRSystem.cs" />
      <Compile Include="Library\PackageCache\com.unity.render-pipelines.core@9d79d0cd2cf7\Runtime\Debugging\DebugDisplaySettingsHDROutput.cs" />
      <Compile Include="Library\PackageCache\com.unity.render-pipelines.core@9d79d0cd2cf7\Runtime\Common\ContextContainer.cs" />
