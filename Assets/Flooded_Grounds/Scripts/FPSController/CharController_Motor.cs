@@ -16,7 +16,7 @@ public class FpsController : MonoBehaviour
     public float alturaAgachado = 1f;
 
     [Header("Mouse")]
-    public float sensibilidadMouse = 2f;
+    public float sensibilidadMouse = 0.2f;
     public float limiteVertical = 80f;
 
     [Header("Referencias")]
@@ -35,12 +35,8 @@ public class FpsController : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
 
-        if (camaraJugador == null)
-        {
-            Camera cam = GetComponentInChildren<Camera>();
-            if (cam != null)
-                camaraJugador = cam.transform;
-        }
+        Debug.Log("Mouse X inicial: " + Input.GetAxisRaw("Mouse X"));
+        Debug.Log("Mouse Y inicial: " + Input.GetAxisRaw("Mouse Y"));
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -58,17 +54,22 @@ public class FpsController : MonoBehaviour
 
     void Mirar()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * sensibilidadMouse;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * sensibilidadMouse;
+        float mouseX = Input.GetAxisRaw("Mouse X");
+        float mouseY = Input.GetAxisRaw("Mouse Y");
+
+        Debug.Log("X=" + mouseX + " Y=" + mouseY);
+
+        mouseX *= sensibilidadMouse;
+        mouseY *= sensibilidadMouse;
 
         transform.Rotate(Vector3.up * mouseX);
 
         rotacionX -= mouseY;
         rotacionX = Mathf.Clamp(rotacionX, -limiteVertical, limiteVertical);
 
-        camaraJugador.localRotation = Quaternion.Euler(rotacionX, 0f, 0f);
+        camaraJugador.localRotation =
+            Quaternion.Euler(rotacionX, 0f, 0f);
     }
-
     void Mover()
     {
         float h = Input.GetAxisRaw("Horizontal");
