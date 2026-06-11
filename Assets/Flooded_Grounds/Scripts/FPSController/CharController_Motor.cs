@@ -29,6 +29,7 @@ public class FpsController : MonoBehaviour
     private CharacterController cc;
     private Vector3 velocidadVertical;
     private float rotacionX;
+    private bool estabaEnSuelo; // para evitar el frame de delay de isGrounded
 
     void Start()
     {
@@ -37,7 +38,6 @@ public class FpsController : MonoBehaviour
         if (camaraJugador == null)
         {
             Camera cam = GetComponentInChildren<Camera>();
-
             if (cam != null)
                 camaraJugador = cam.transform;
         }
@@ -66,8 +66,7 @@ public class FpsController : MonoBehaviour
         rotacionX -= mouseY;
         rotacionX = Mathf.Clamp(rotacionX, -limiteVertical, limiteVertical);
 
-        camaraJugador.localRotation =
-            Quaternion.Euler(rotacionX, 0f, 0f);
+        camaraJugador.localRotation = Quaternion.Euler(rotacionX, 0f, 0f);
     }
 
     void Mover()
@@ -75,11 +74,9 @@ public class FpsController : MonoBehaviour
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
 
-        Vector3 movimiento =
-            (transform.right * h + transform.forward * v).normalized;
+        Vector3 movimiento = (transform.right * h + transform.forward * v).normalized;
 
-        float velocidadActual =
-            Input.GetKey(KeyCode.LeftShift)
+        float velocidadActual = Input.GetKey(KeyCode.LeftShift)
             ? velocidadCorrer
             : velocidadCaminar;
 
@@ -88,63 +85,43 @@ public class FpsController : MonoBehaviour
 
     void Saltar()
     {
-        if (cc.isGrounded)
-        {
+        bool enSuelo = cc.isGrounded || estabaEnSuelo; // doble verificación
+
+        if (enSuelo && velocidadVertical.y < 0)
             velocidadVertical.y = -2f;
 
-            if (Input.GetButtonDown("Jump"))
-            {
-                velocidadVertical.y =
-                    Mathf.Sqrt(fuerzaSalto * -2f * gravedad);
-            }
-        }
+        if (enSuelo && Input.GetButtonDown("Jump"))
+            velocidadVertical.y = Mathf.Sqrt(fuerzaSalto * -2f * gravedad);
 
         velocidadVertical.y += gravedad * Time.deltaTime;
-
         cc.Move(velocidadVertical * Time.deltaTime);
+
+        estabaEnSuelo = cc.isGrounded; // guarda el estado para el siguiente frame
     }
 
     void Agacharse()
     {
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            cc.height = alturaAgachado;
-        }
-        else
-        {
-            cc.height = alturaNormal;
-        }
+        cc.height = Input.GetKey(KeyCode.LeftControl) ? alturaAgachado : alturaNormal;
     }
 
     void ControlLinterna()
     {
-        if (linterna == null)
-            return;
+        if (linterna == null) return;
 
         if (Input.GetKeyDown(KeyCode.F))
-        {
             linterna.enabled = !linterna.enabled;
-        }
     }
 
     void Interactuar()
     {
-        if (!Input.GetKeyDown(KeyCode.E))
-            return;
+        if (!Input.GetKeyDown(KeyCode.E)) return;
 
         RaycastHit hit;
 
-        if (Physics.Raycast(
-            camaraJugador.position,
-            camaraJugador.forward,
-            out hit,
-            distanciaInteraccion))
+        if (Physics.Raycast(camaraJugador.position, camaraJugador.forward, out hit, distanciaInteraccion))
         {
             Debug.Log("Interactuando con: " + hit.collider.name);
-
-            hit.collider.SendMessage(
-                "Interact",
-                SendMessageOptions.DontRequireReceiver);
+            hit.collider.SendMessage("Interact", SendMessageOptions.DontRequireReceiver);
         }
     }
 }
