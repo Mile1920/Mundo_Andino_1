@@ -6,6 +6,8 @@ public class RadarObjetivo : MonoBehaviour
 
     private Transform objetivo;
 
+    public float velocidadRotacion = 5f;
+
     void Update()
     {
         BuscarObjetivo();
@@ -16,12 +18,21 @@ public class RadarObjetivo : MonoBehaviour
         Vector3 direccion =
             objetivo.position - jugador.position;
 
+        direccion.y = 0f;
+
         float angulo =
             Mathf.Atan2(direccion.x, direccion.z)
             * Mathf.Rad2Deg;
 
-        transform.rotation =
+        Quaternion rotacionObjetivo =
             Quaternion.Euler(0, 0, -angulo);
+
+        transform.rotation =
+            Quaternion.Lerp(
+                transform.rotation,
+                rotacionObjetivo,
+                velocidadRotacion * Time.deltaTime
+            );
     }
 
     void BuscarObjetivo()
