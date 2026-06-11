@@ -19,10 +19,12 @@ public class GameManager : MonoBehaviour
     public GameObject panelVictoria;
 
     [Header("Siguiente Nivel")]
-    public string nombreSiguienteNivel = "Nivel2_Illimani";
+    public string nombreMenuPrincipal = "menuPanel";
 
     private List<string> objetosRecolectados = new List<string>();
     private int totalRequeridos;
+    
+    public bool tieneMoneda = false;
 
     void Start()
     {
@@ -44,7 +46,9 @@ public class GameManager : MonoBehaviour
             MostrarMensaje($"¡{nombreObjeto} obtenido!");
 
             if (objetosRecolectados.Count >= totalRequeridos)
-                NivelCompletado();
+            {
+                ObtenerMoneda();
+            }
         }
     }
 
@@ -70,20 +74,35 @@ public class GameManager : MonoBehaviour
         if (textoMensaje != null)
             textoMensaje.text = "";
     }
+    void ObtenerMoneda()
+    {
+        if (tieneMoneda)
+            return;
+
+        tieneMoneda = true;
+
+        Debug.Log("Moneda de Plata obtenida");
+
+        MostrarMensaje("¡Moneda de Plata obtenida!");
+
+        Invoke(nameof(NivelCompletado), 2f);
+    }
 
     void NivelCompletado()
     {
-        Debug.Log("¡Nivel completado! El Tío te deja pasar.");
+        Debug.Log("¡Nivel completado!");
 
         if (panelVictoria != null)
             panelVictoria.SetActive(true);
 
-        Invoke(nameof(CargarSiguienteNivel), 3f);
+        MostrarMensaje("¡Felicidades! Has completado el nivel.");
+
+        Invoke(nameof(VolverAlMenu), 5f);
     }
 
-    void CargarSiguienteNivel()
+    void VolverAlMenu()
     {
-        if (!string.IsNullOrEmpty(nombreSiguienteNivel))
-            SceneManager.LoadScene(nombreSiguienteNivel);
+        Debug.Log("VOLVIENDO AL MENU");
+        SceneManager.LoadScene(nombreMenuPrincipal);
     }
 }
